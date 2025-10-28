@@ -15,8 +15,7 @@ return [
      * C'EST ICI que vous ajoutez votre frontend Angular.
      */
     'allowed_origins' => [
-        'http://localhost:4200',
-        'http://127.0.0.1:4200',
+        'https://cure-dame-2025.netlify.app'
     ],
 
     /*

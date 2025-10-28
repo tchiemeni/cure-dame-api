@@ -14,31 +14,33 @@ class PostSeeder extends Seeder
     public function run(): void
     {
         // Récupérer l'ID de l'Administrateur
-        $adminId = User::where('email', 'admin@cure.com')->first()->id;
+        $admin = User::where('email', 'admin@cure.com')->first();
 
-        // Récupérer un ensemble d'IDs d'utilisateurs
-        $userIds = User::pluck('id');
+        // Vérifier si l'administrateur existe
+        if ($admin) {
+            // Créer 5 posts de type 'vidéo' par l'Admin
+            Post::factory()->create([
+                'user_id' => $admin->id,
+                'type' => 'video',
+                'media_url' => 'https://example.com/video/' . \Illuminate\Support\Str::uuid() . '.mp4',
+            ]);
 
-        // 1. Créer 5 posts de type 'vidéo' par l'Admin
-        Post::factory(5)->create([
-            'user_id' => $adminId,
-            'type' => 'video',
-            'media_url' => 'https://example.com/video/' . fake()->uuid() . '.mp4',
-        ]);
+            // Créer 5 posts de type 'audio' par l'Admin
+            Post::factory()->create([
+                'user_id' => $admin->id,
+                'type' => 'audio',
+                'media_url' => 'https://example.com/audio/' . \Illuminate\Support\Str::uuid() . '.mp3',
+            ]);
 
-        // 2. Créer 5 posts de type 'audio' par l'Admin
-        Post::factory(5)->create([
-            'user_id' => $adminId,
-            'type' => 'audio',
-            'media_url' => 'https://example.com/audio/' . fake()->uuid() . '.mp3',
-        ]);
-
-        // 3. Créer 10 posts de type 'prayer' (prière) par des utilisateurs aléatoires
-        Post::factory(10)->create([
-            'user_id' => fake()->randomElement($userIds),
-            'type' => 'prayer',
-            'media_url' => null, // Pas de média pour les prières simples
-            'content' => fake()->paragraph(5),
-        ]);
+            // Créer 10 posts de type 'prayer' (prière) par l'Admin
+            foreach (range(1, 10) as $index) {
+                Post::factory()->create([
+                    'user_id' => $admin->id,
+                    'type' => 'prayer',
+                    'media_url' => null, // Pas de média pour les prières simples
+                    'content' => 'Contenu de prière généré pour le post ' . ($index + 1), // Contenu statique
+                ]);
+            }
+        }
     }
 }

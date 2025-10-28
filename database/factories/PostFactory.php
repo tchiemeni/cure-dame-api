@@ -1,7 +1,5 @@
 <?php
 
-// database/factories/PostFactory.php
-
 namespace Database\Factories;
 
 use App\Models\Post;
@@ -20,7 +18,7 @@ class PostFactory extends Factory
             'title' => $this->faker->sentence(4),
             'content' => $this->faker->paragraph(3),
             'type' => $type,
-            'media_url' => ($type != 'prayer') ? $this->faker->url() : null,
+            'media_url' => ($type !== 'prayer') ? $this->faker->url() : null,
             'user_id' => \App\Models\User::factory(), // IMPORTANT
         ];
     }
